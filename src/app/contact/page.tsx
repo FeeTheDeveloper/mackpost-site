@@ -36,8 +36,8 @@ export default function ContactPage() {
           <div className="mt-6 space-y-3 text-sm text-slate-200">
             <p>
               <span className="font-semibold text-slate-100">Email:</span> 
-              <a className="underline" href="mailto:operations@mackpostmgmt.com">
-                operations@mackpostmgmt.com
+              <a className="underline" href="mailto:contact@mackpostmgt.com">
+                contact@mackpostmgt.com
               </a>
             </p>
             <p>

@@ -1,88 +1,40 @@
 export interface Listing {
   id: string;
-  images: string[];
+  /** Path to the listing PNG inside public/listings/ */
+  image: string;
+  /** Human-readable alt text */
+  alt: string;
 }
 
-export const listings: Listing[] = [
-  {
-    id: "listing-01",
-    images: [
-      "/listings/listing-01/cover.png",
-      "/listings/listing-01/image-1.png",
-      "/listings/listing-01/image-2.png",
-      "/listings/listing-01/image-3.png",
-    ],
-  },
-  {
-    id: "listing-02",
-    images: [
-      "/listings/listing-02/cover.png",
-      "/listings/listing-02/image-1.png",
-      "/listings/listing-02/image-2.png",
-      "/listings/listing-02/image-3.png",
-    ],
-  },
-  {
-    id: "listing-03",
-    images: [
-      "/listings/listing-03/cover.png",
-      "/listings/listing-03/image-1.png",
-      "/listings/listing-03/image-2.png",
-      "/listings/listing-03/image-3.png",
-    ],
-  },
-  {
-    id: "listing-04",
-    images: [
-      "/listings/listing-04/cover.png",
-      "/listings/listing-04/image-1.png",
-      "/listings/listing-04/image-2.png",
-      "/listings/listing-04/image-3.png",
-    ],
-  },
-  {
-    id: "listing-05",
-    images: [
-      "/listings/listing-05/cover.png",
-      "/listings/listing-05/image-1.png",
-      "/listings/listing-05/image-2.png",
-      "/listings/listing-05/image-3.png",
-    ],
-  },
-  {
-    id: "listing-06",
-    images: [
-      "/listings/listing-06/cover.png",
-      "/listings/listing-06/image-1.png",
-      "/listings/listing-06/image-2.png",
-      "/listings/listing-06/image-3.png",
-    ],
-  },
-  {
-    id: "listing-07",
-    images: [
-      "/listings/listing-07/cover.png",
-      "/listings/listing-07/image-1.png",
-      "/listings/listing-07/image-2.png",
-      "/listings/listing-07/image-3.png",
-    ],
-  },
-  {
-    id: "listing-08",
-    images: [
-      "/listings/listing-08/cover.png",
-      "/listings/listing-08/image-1.png",
-      "/listings/listing-08/image-2.png",
-      "/listings/listing-08/image-3.png",
-    ],
-  },
-  {
-    id: "listing-09",
-    images: [
-      "/listings/listing-09/cover.png",
-      "/listings/listing-09/image-1.png",
-      "/listings/listing-09/image-2.png",
-      "/listings/listing-09/image-3.png",
-    ],
-  },
-];
+/**
+ * Total number of listing images.
+ * To add a new listing, drop a PNG named `listing_XX.png` into
+ * `public/listings/` and bump this count.
+ *
+ * Naming convention:  listing_01.png, listing_02.png, …
+ */
+const LISTING_COUNT = 9;
+
+/** Pad a number to two digits: 1 → "01" */
+function pad(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+/**
+ * Auto-generates the listings array from the file-naming convention.
+ * Each entry maps to  `/listings/listing_XX.png`.
+ */
+export const listings: Listing[] = Array.from(
+  { length: LISTING_COUNT },
+  (_, i) => {
+    const num = pad(i + 1);
+    return {
+      id: `listing_${num}`,
+      image: `/listings/listing_${num}.png`,
+      alt: `Property listing ${num}`,
+    };
+  }
+);
+
+/** Flat array of image paths — convenience export. */
+export const listingImages: string[] = listings.map((l) => l.image);

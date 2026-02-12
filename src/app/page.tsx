@@ -84,6 +84,23 @@ export default function HomePage() {
       </Section>
 
       <Section
+        title="Browse Our Properties"
+        subtitle="Explore current listings under Mackpost management across Texas."
+      >
+        <div className="flex flex-col gap-4 rounded-xl bg-slate-900 p-8 text-slate-100 shadow-lg md:flex-row md:items-center md:justify-between">
+          <p className="text-base leading-relaxed text-slate-200">
+            See what's currently available — disciplined management, move-in ready.
+          </p>
+          <a
+            className="inline-flex items-center justify-center rounded-xl bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-500"
+            href="/listings"
+          >
+            View Listings
+          </a>
+        </div>
+      </Section>
+
+      <Section
         title="Ready for Command-Level Oversight?"
         subtitle="Start with a focused discovery call and get a clear, actionable operating plan."
       >
