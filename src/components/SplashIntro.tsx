@@ -1,11 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 const STORAGE_KEY = "mackpost_intro_seen";
 const REPLAY_EVENT = "mackpost:replay-intro";
+
+/* ── Safe sessionStorage helpers (never throw) ── */
+function safeGetItem(key: string): string | null {
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSetItem(key: string, value: string): void {
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {
+    /* storage unavailable — silently ignore */
+  }
+}
+
+function safeRemoveItem(key: string): void {
+  try {
+    sessionStorage.removeItem(key);
+  } catch {
+    /* storage unavailable — silently ignore */
+  }
+}
+
+export { safeRemoveItem, REPLAY_EVENT, STORAGE_KEY };
 
 export default function SplashIntro() {
   const pathname = usePathname();
@@ -13,9 +40,8 @@ export default function SplashIntro() {
   const btnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // Only show on the home route and only if not already seen this session
     if (pathname !== "/") return;
-    if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
+    if (safeGetItem(STORAGE_KEY) === "1") return;
     setVisible(true);
   }, [pathname]);
 
@@ -30,12 +56,19 @@ export default function SplashIntro() {
     return () => window.removeEventListener(REPLAY_EVENT, handleReplay);
   }, [pathname]);
 
-  // Focus the "Enter Site" button when the overlay becomes visible
+  // Focus the "Enter Site" button with a short delay to ensure the DOM is ready
   useEffect(() => {
-    if (visible) {
+    if (!visible) return;
+    const timer = setTimeout(() => {
       btnRef.current?.focus();
-    }
+    }, 50);
+    return () => clearTimeout(timer);
   }, [visible]);
+
+  const dismiss = useCallback(() => {
+    safeSetItem(STORAGE_KEY, "1");
+    setVisible(false);
+  }, []);
 
   // Dismiss on ESC
   useEffect(() => {
@@ -45,13 +78,7 @@ export default function SplashIntro() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
-
-  function dismiss() {
-    sessionStorage.setItem(STORAGE_KEY, "1");
-    setVisible(false);
-  }
+  }, [visible, dismiss]);
 
   if (!visible) return null;
 

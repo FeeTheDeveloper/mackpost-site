@@ -3,9 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
-const STORAGE_KEY = "mackpost_intro_seen";
-const REPLAY_EVENT = "mackpost:replay-intro";
+import { safeRemoveItem, REPLAY_EVENT, STORAGE_KEY } from "@/components/SplashIntro";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -18,7 +16,7 @@ export default function Navbar() {
   const router = useRouter();
 
   function handleReplayIntro() {
-    sessionStorage.removeItem(STORAGE_KEY);
+    safeRemoveItem(STORAGE_KEY);
     window.dispatchEvent(new Event(REPLAY_EVENT));
     router.push("/");
   }
