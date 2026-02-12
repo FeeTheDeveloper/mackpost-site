@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 const STORAGE_KEY = "mackpost_intro_seen";
+const REPLAY_EVENT = "mackpost:replay-intro";
 
 export default function SplashIntro() {
   const pathname = usePathname();
@@ -16,6 +17,17 @@ export default function SplashIntro() {
     if (pathname !== "/") return;
     if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
     setVisible(true);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleReplay = () => {
+      if (pathname === "/") {
+        setVisible(true);
+      }
+    };
+
+    window.addEventListener(REPLAY_EVENT, handleReplay);
+    return () => window.removeEventListener(REPLAY_EVENT, handleReplay);
   }, [pathname]);
 
   // Focus the "Enter Site" button when the overlay becomes visible
@@ -69,6 +81,7 @@ export default function SplashIntro() {
       <button
         ref={btnRef}
         onClick={dismiss}
+        aria-label="Enter the Mackpost site"
         className="rounded-xl bg-amber-600 px-8 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-900"
       >
         Enter Site

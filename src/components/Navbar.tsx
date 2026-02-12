@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const STORAGE_KEY = "mackpost_intro_seen";
+const REPLAY_EVENT = "mackpost:replay-intro";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -18,33 +19,36 @@ export default function Navbar() {
 
   function handleReplayIntro() {
     sessionStorage.removeItem(STORAGE_KEY);
+    window.dispatchEvent(new Event(REPLAY_EVENT));
     router.push("/");
-    // Force a reload so the splash shows again on "/"
-    router.refresh();
   }
 
   return (
     <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-        {/* Logo + brand name */}
-        <Link href="/" className="flex items-center gap-2">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4">
+        <Link
+          href="/"
+          className="flex items-center gap-2 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+          aria-label="Go to main menu"
+        >
           <Image
             src="/logo.png"
             alt="Mackpost logo"
-            width={36}
-            height={36}
+            width={40}
+            height={40}
             className="rounded"
+            priority
           />
-          <span className="text-base font-semibold text-slate-900">
+          <span className="hidden text-base font-semibold text-slate-900 sm:inline">
             Mackpost Management Group LLC
           </span>
         </Link>
 
-        <nav className="flex items-center gap-5 text-sm font-medium text-slate-600">
-          {/* Main Menu link */}
+        <nav className="flex flex-wrap items-center justify-end gap-3 text-sm font-medium text-slate-600">
           <Link
             href="/"
-            className="font-semibold text-slate-900 transition hover:text-amber-600"
+            aria-label="Open Main Menu"
+            className="rounded-md px-2 py-1 font-semibold text-slate-900 transition hover:text-amber-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
           >
             Main Menu
           </Link>
@@ -53,24 +57,17 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="transition hover:text-slate-900"
+              className="rounded-md px-2 py-1 transition hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             >
               {link.label}
             </Link>
           ))}
 
-          <Link
-            href="/contact"
-            className="rounded-xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-500"
-          >
-            Request Consult
-          </Link>
-
-          {/* Replay Intro */}
           <button
             type="button"
             onClick={handleReplayIntro}
-            className="text-xs text-slate-400 transition hover:text-slate-700"
+            aria-label="Replay intro splash"
+            className="rounded-md px-2 py-1 text-xs text-slate-500 transition hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
           >
             Replay Intro
           </button>
