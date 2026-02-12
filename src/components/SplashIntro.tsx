@@ -65,8 +65,8 @@ export default function SplashIntro() {
       <Image
         src="/logo.png"
         alt="Mackpost Management Group LLC logo"
-        width={140}
-        height={140}
+        width={420}
+        height={420}
         className="mb-6"
         priority
       />

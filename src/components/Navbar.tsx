@@ -34,8 +34,8 @@ export default function Navbar() {
           <Image
             src="/logo.png"
             alt="Mackpost logo"
-            width={40}
-            height={40}
+            width={72}
+            height={72}
             className="rounded"
             priority
           />
